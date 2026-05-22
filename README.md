@@ -2,37 +2,38 @@
 
 Marketing site for **StopTap**, served at https://stoptap.in.
 
-- Static site (HTML/CSS/JS), served by nginx in a single container on the shared
-  Coolify server (Dockerfile build pack, port 80, routed via Traefik).
-- The **Download app** CTA detects the visitor's device and redirects:
-  - Android → Google Play
-  - iOS → App Store
-  - Desktop → the web version (UPI Help portal)
-
-## Edit the download targets
-The three URLs live in one place at the bottom of `site/index.html`:
-
-```js
-var LINKS = {
-  android: "https://play.google.com/store/apps/details?id=com.valuegarageupihelp.app",
-  ios: "https://apps.apple.com/app/idXXXXXXXXX",   // replace after first App Store submission
-  desktop: "https://www.upihelp.npci.org.in/"
-};
-```
-
-The Android link already uses the real package id and will work once the app is
-published. Replace the iOS placeholder ID after the app's first App Store build.
+Single-page React site (React 18 + Babel standalone + Tailwind, all via CDN — **no build step**), served by nginx in one container on the shared Coolify server (Dockerfile, port 80, routed via Traefik).
 
 ## Structure
 ```
-Dockerfile          nginx:alpine serving /site
-nginx.conf          clean URLs + /health
+Dockerfile            nginx:alpine serving /site
+nginx.conf            clean URLs, /jsx mime, /health
 site/
-  index.html        landing page (inline CSS/JS)
-  privacy/index.html  privacy policy (linked from listings)
-  assets/           logo, icon, og image, screenshots
+  index.html          page shell: meta, Tailwind config, fonts, FAQ JSON-LD, script tags
+  app.jsx             root component + theming
+  sections.jsx        Nav, Hero, HowItWorks, FAQ, Footer, MobileStickyCTA, ...
+  components.jsx       atoms: Logo, CTAButton, PhoneHero, STORE_LINKS + useAppLink
+  tweaks-panel.jsx     dev-only editor (stays hidden in production)
+  og.png / favicon.png brand images
+  privacy/index.html   privacy policy (linked from the footer + used for store listings)
 ```
 
+## Edit the download targets
+The Download / "Find My Subscriptions" CTAs route through `useAppLink()` (device
+detection). Update the three constants at the top of `site/components.jsx`:
+
+```js
+const STORE_LINKS = {
+  ios:     'https://apps.apple.com/in/app/stoptap/id000000000',         // replace after iOS submission
+  android: 'https://play.google.com/store/apps/details?id=com.valuegarageupihelp.app',
+  web:     'https://www.upihelp.npci.org.in/',                          // desktop fallback
+};
+```
+
+## Still placeholder (from the design brief)
+- iOS App Store ID (no iOS build yet)
+- Footer: founder names, Terms/Security links, Twitter/X, contact email
+- Swap the in-browser dev React/Babel for a real build if you want production-optimised JS
+
 ## Deploy
-Coolify app builds from this repo's Dockerfile. Push to `main`, then redeploy
-(Coolify auto-deploys on push if enabled, or trigger via API/dashboard).
+Coolify builds from this repo's Dockerfile. Push to `main`, then redeploy.
