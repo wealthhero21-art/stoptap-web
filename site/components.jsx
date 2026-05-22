@@ -122,15 +122,27 @@ function CountUp({ to, prefix = '', suffix = '', decimals = 0, duration = 1400 }
 // Hero "phone" with subscription cards. One card cancels every 4s on a loop.
 // ─────────────────────────────────────────────────────────────────────────
 
+// Dummy logo glyphs — tiny SVGs that fill the colored tile, white stroke
+const GLYPHS = {
+  play:    (<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>),
+  pulse:   (<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12h3l2-6 4 12 3-9 2 3h4"/></svg>),
+  news:    (<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2"><rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M7 9h6M7 12h6M7 15h4" strokeLinecap="round"/></svg>),
+  pen:     (<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 4l6 6L8 22H2v-6L14 4z"/><path d="M12 6l6 6"/></svg>),
+  cloud:   (<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 18a4 4 0 010-8 6 6 0 0111.5 1.5A3.5 3.5 0 0117 18H7z"/></svg>),
+  cap:     (<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 9l10-5 10 5-10 5L2 9z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>),
+  shield:  (<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V6l8-3z"/></svg>),
+  basket:  (<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9h18l-2 11H5L3 9z"/><path d="M8 9l4-6 4 6"/></svg>),
+};
+
 const SUBS_POOL = [
-  { name: "Hotstar Super",    cat: "Sports & OTT",    amt: 299,  color: "#1F80E0", initial: "H" },
-  { name: "FitClub Premium",  cat: "Gym membership",  amt: 1499, color: "#018136", initial: "F" },
-  { name: "ToiPlus News",     cat: "News",            amt: 99,   color: "#C2410C", initial: "T" },
-  { name: "Notion Personal",  cat: "SaaS",            amt: 399,  color: "#0A0E1F", initial: "N" },
-  { name: "ZeeKitchen Mini",  cat: "Food membership", amt: 199,  color: "#EF7102", initial: "Z" },
-  { name: "DriveCloud 200GB", cat: "Cloud storage",   amt: 130,  color: "#5B6FE0", initial: "D" },
-  { name: "CodeCoach Pro",    cat: "Coaching",        amt: 899,  color: "#7C3AED", initial: "C" },
-  { name: "ShieldOne Insur",  cat: "Insurance",       amt: 549,  color: "#0E7490", initial: "S" },
+  { name: "Streamly+",     cat: "OTT",         amt: 299,  color: "#1F80E0", glyph: 'play'   },
+  { name: "PulseFit",      cat: "Fitness",     amt: 1499, color: "#018136", glyph: 'pulse'  },
+  { name: "BriefDaily",    cat: "News",        amt: 99,   color: "#C2410C", glyph: 'news'   },
+  { name: "Sketchpad",     cat: "Design SaaS", amt: 399,  color: "#0A0E1F", glyph: 'pen'    },
+  { name: "PantryPass",    cat: "Grocery",     amt: 199,  color: "#EF7102", glyph: 'basket' },
+  { name: "ClipDrive",     cat: "Cloud 200GB", amt: 130,  color: "#5B6FE0", glyph: 'cloud'  },
+  { name: "PrepHub",       cat: "Coaching",    amt: 899,  color: "#7C3AED", glyph: 'cap'    },
+  { name: "SafeShield",    cat: "Insurance",   amt: 549,  color: "#0E7490", glyph: 'shield' },
 ];
 
 function SubCard({ sub, anim }) {
@@ -140,21 +152,20 @@ function SubCard({ sub, anim }) {
     ? { animation: 'slideInBottom .7s cubic-bezier(.2,.7,.3,1) forwards' }
     : null;
   return (
-    <div className="flex items-center gap-3 rounded-2xl bg-white border border-line/80 p-3 pr-2"
-         style={{ ...style, height: 68 }}>
-      <div className="shrink-0 grid place-items-center rounded-xl text-white font-bold"
-           style={{ background: sub.color, width: 40, height: 40, fontSize: 16 }}>
-        {sub.initial}
+    <div className="flex items-center gap-2.5 rounded-2xl bg-white border border-line/80 p-2.5 pr-2"
+         style={{ ...style, height: 64 }}>
+      <div className="shrink-0 grid place-items-center rounded-xl text-white"
+           style={{ background: sub.color, width: 40, height: 40 }}>
+        {GLYPHS[sub.glyph]}
       </div>
       <div className="min-w-0 flex-1">
-        <div className="text-[13.5px] font-semibold text-ink truncate leading-tight">{sub.name}</div>
-        <div className="text-[11px] text-ink2 mt-0.5">{sub.cat} · Monthly</div>
+        <div className="text-[14px] font-semibold text-ink truncate leading-tight" style={{ letterSpacing: '-0.01em' }}>{sub.name}</div>
+        <div className="text-[10.5px] text-ink2 mt-1 truncate">{sub.cat}</div>
       </div>
-      <div className="text-right pr-2">
-        <div className="text-[13.5px] font-bold text-ink tnum leading-tight">₹{sub.amt}</div>
-        <div className="text-[10px] text-ink2">/ month</div>
+      <div className="text-right">
+        <div className="text-[13px] font-bold text-ink tnum leading-tight whitespace-nowrap">₹{sub.amt}<span className="text-ink2 font-medium">/mo</span></div>
       </div>
-      <button className="shrink-0 text-[11px] font-semibold text-orange bg-orange/10 hover:bg-orange/15 rounded-full px-2.5 py-1.5">
+      <button className="shrink-0 text-[10.5px] font-semibold text-orange bg-orange/10 hover:bg-orange/15 rounded-full px-2 py-1.5">
         Cancel
       </button>
     </div>
@@ -162,31 +173,27 @@ function SubCard({ sub, anim }) {
 }
 
 function PhoneHero() {
-  const [visible, setVisible] = React.useState(() => SUBS_POOL.slice(0, 5));
-  const [cancelling, setCancelling] = React.useState(null);    // id index being removed
-  const [toast, setToast] = React.useState(null);              // { amt, name }
-  const [pool, setPool] = React.useState(() => SUBS_POOL.slice(5));
+  const [visible, setVisible] = React.useState(() => SUBS_POOL.slice(0, 4));
+  const [cancelling, setCancelling] = React.useState(null);
+  const [toast, setToast] = React.useState(null);
   const [incoming, setIncoming] = React.useState(null);
+  const visibleRef = React.useRef(visible); visibleRef.current = visible;
+  const insertIdxRef = React.useRef(4); // next index in SUBS_POOL to insert
 
   React.useEffect(() => {
     let cancelled = false;
     let timers = [];
     const tick = () => {
-      // pick top card to cancel
       const target = visibleRef.current[0];
       if (!target) return;
       setCancelling(0);
       setToast({ amt: target.amt, name: target.name });
       timers.push(setTimeout(() => {
         if (cancelled) return;
-        // After animation: drop top, push new from pool, rotate
-        setVisible(v => {
-          const next = v.slice(1);
-          const incomingCard = poolRef.current[0] || SUBS_POOL[Math.floor(Math.random()*SUBS_POOL.length)];
-          setPool(p => { const rest = p.slice(1); return [...rest, target]; });
-          setIncoming(incomingCard);
-          return [...next, incomingCard];
-        });
+        const incomingCard = SUBS_POOL[insertIdxRef.current % SUBS_POOL.length];
+        insertIdxRef.current += 1;
+        setIncoming(incomingCard);
+        setVisible(v => [...v.slice(1), incomingCard]);
         setCancelling(null);
         timers.push(setTimeout(() => { if (!cancelled) setIncoming(null); }, 700));
       }, 1100));
@@ -197,11 +204,7 @@ function PhoneHero() {
     return () => { cancelled = true; clearInterval(id); timers.forEach(clearTimeout); };
   }, []);
 
-  // refs so the interval callback sees latest state
-  const visibleRef = React.useRef(visible); visibleRef.current = visible;
-  const poolRef = React.useRef(pool); poolRef.current = pool;
-
-  // Compute "total monthly" with subtle count
+  // Compute "total monthly"
   const total = visible.reduce((s, x) => s + x.amt, 0);
 
   return (
@@ -231,7 +234,14 @@ function PhoneHero() {
               <span className="text-[13px] font-semibold text-ink">StopTap</span>
               <span className="ml-auto text-[10px] font-semibold uppercase tracking-wider text-green bg-green/10 px-2 py-0.5 rounded-full">Live</span>
             </div>
-            <h3 className="mt-4 text-[20px] font-bold text-ink leading-tight" style={{ letterSpacing: '-0.02em' }}>
+
+            {/* Savings banner — always at the top */}
+            <div className="mt-3 flex items-center gap-2 bg-green/10 text-green rounded-lg px-2.5 py-1.5">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+              <span className="text-[11px] font-semibold tnum">₹4,328 saved this year</span>
+            </div>
+
+            <h3 className="mt-3 text-[19px] font-bold text-ink leading-tight" style={{ letterSpacing: '-0.02em' }}>
               Your active<br/>AutoPay mandates
             </h3>
             <div className="mt-2 flex items-baseline gap-2">
@@ -249,36 +259,26 @@ function PhoneHero() {
             ))}
           </div>
 
-          {/* Saved toast */}
+          {/* Saved toast — bottom of phone, slides up */}
           {toast && (
             <div className="absolute left-1/2 -translate-x-1/2 z-20"
-                 style={{ top: 92, animation: 'toastIn 2.6s ease-in-out forwards' }}>
-              <div className="flex items-center gap-2 bg-green text-white px-3.5 py-2 rounded-full shadow-lg text-[12px] font-semibold">
+                 style={{ bottom: 22, animation: 'toastIn 2.6s ease-in-out forwards' }}>
+              <div className="flex items-center gap-2 bg-green text-white px-3.5 py-2 rounded-full shadow-lg text-[12px] font-semibold whitespace-nowrap">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M5 13l4 4L19 7"/></svg>
-                Saved ₹{toast.amt} / month
+                Saved ₹{toast.amt}/mo
               </div>
             </div>
           )}
         </div>
       </div>
 
-      {/* Side floating chip */}
-      <div className="hidden lg:flex absolute -left-16 top-24 bg-white rounded-2xl border border-line shadow-card p-3 pr-4 gap-3 items-center">
-        <div className="w-9 h-9 rounded-xl bg-orange/10 grid place-items-center">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF7102" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3 12h4l3-9 4 18 3-9h4"/>
-          </svg>
-        </div>
-        <div>
-          <div className="text-[11px] text-ink2">This year</div>
-          <div className="text-[14px] font-bold text-ink tnum">₹4,328 saved</div>
-        </div>
-      </div>
-      <div className="hidden lg:flex absolute -right-12 bottom-28 bg-white rounded-2xl border border-line shadow-card p-3 gap-3 items-center">
+      {/* Side floating chip — Avg session, only on truly wide screens */}
+      <div className="hidden 2xl:flex absolute bottom-28 bg-white rounded-2xl border border-line shadow-card p-3 gap-3 items-center"
+           style={{ left: '100%', marginLeft: 20 }}>
         <div className="w-9 h-9 rounded-xl bg-brand/10 grid place-items-center">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#242D7A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
         </div>
-        <div className="pr-2">
+        <div className="pr-2 whitespace-nowrap">
           <div className="text-[11px] text-ink2">Avg. session</div>
           <div className="text-[14px] font-bold text-ink tnum">58 sec</div>
         </div>

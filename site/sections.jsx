@@ -307,10 +307,12 @@ function Honesty() {
             <span className="text-orange font-bold ml-1">"</span>
           </blockquote>
           <div className="mt-6 flex items-center gap-3 text-[13px] text-ink2">
-            <div className="w-9 h-9 rounded-full bg-brand text-white grid place-items-center font-semibold text-[12px]">A&amp;K</div>
+            <div className="w-9 h-9 rounded-full bg-brand text-white grid place-items-center">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
             <div>
-              <div className="text-ink font-medium">Aarav &amp; Kavya</div>
-              <div>Founders, StopTap.in · Bengaluru</div>
+              <div className="text-ink font-medium">Founders, StopTap.in</div>
+              <div>Delhi, India</div>
             </div>
           </div>
         </div>
@@ -451,14 +453,12 @@ function Footer() {
             <div className="text-[11px] font-mono uppercase tracking-wider text-ink2/70">Contact</div>
             <ul className="mt-3 space-y-2 text-[14px] text-ink">
               <li><a href="mailto:hi@stoptap.in" className="hover:text-orange">hi@stoptap.in</a></li>
-              <li><a href="#" className="hover:text-orange">Twitter / X</a></li>
             </ul>
           </div>
         </div>
 
         <div className="mt-12 pt-6 border-t border-line flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-[12px] text-ink2">
           <div>© 2026 StopTap.in · Built in India · Independent of NPCI and the Government of India.</div>
-          <div className="font-mono text-[11px] text-ink2/70">v1.0 · stoptap.in</div>
         </div>
       </div>
     </footer>
